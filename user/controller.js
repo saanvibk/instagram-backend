@@ -4,6 +4,14 @@ import bcryptjs from 'bcryptjs';
 
 const router = Router();
 
+const checkSession = (req, res, next) => {
+  if (req.session.user) {
+    next();
+  } else {
+    res.status(401).json({ msg: 'Session expired' });
+  }
+};
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const findUser = await User.findOne({ email: email });
@@ -50,6 +58,10 @@ router.post('/signup', async (req, res) => {
   }
   console.log('session =', req.session);
   console.log('session ID =', req.session.id);
+});
+
+router.get('/home', checkSession, (req, res) => {
+  res.status(200).send('home');
 });
 
 export default router;
