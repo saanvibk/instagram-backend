@@ -3,18 +3,19 @@ import connectDB from './db/connect.js';
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import flash from 'connect-flash';
 import authRoutes from './user/controller.js';
+import MongoStore from 'connect-mongo';
+import mongoose from 'mongoose';
 
 const app = express();
 
 const corsOptions = {
   credentials: true, // Allow credentials (cookies)
   origin: 'http://localhost:3000', // Update with your frontend URL
-  exposedHeaders: ['set-cookie', 'ajax_redirect'],
-  preflightContinue: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  optionsSuccessStatus: 200,
+  // exposedHeaders: ['set-cookie', 'ajax_redirect'],
+  // preflightContinue: true,
+  // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  // optionsSuccessStatus: 200,
 };
 
 app.use(express.json());
@@ -22,15 +23,18 @@ app.use(cors(corsOptions));
 app.use(cookieParser('helloWorld'));
 app.use(
   session({
-    secret: 'instagram',
-    saveUninitialized: false,
+    secret: 'saanvi',
+    saveUninitialized: true,
     resave: false,
     cookie: {
-      maxAge: 30000,
+      maxAge: 20000,
     },
+
+    store: MongoStore.create({
+      mongoUrl: 'mongodb://127.0.0.1:27017/session',
+    }),
   }),
 );
-app.use(flash());
 
 // Routes
 app.use('/auth', authRoutes);
