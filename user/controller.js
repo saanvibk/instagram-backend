@@ -59,6 +59,19 @@ router.post('/signup', async (req, res) => {
   console.log('session ID =', req.session.id);
 });
 
+router.get('/logout', async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ msg: 'User not logged in ' });
+  }
+  try {
+    await req.sessionStore.destroy(req.session.id);
+    return res.status(200).json({ msg: 'Loggin Out ' });
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.get('/home', checkSession, (req, res) => {
   res.status(200).send('home');
 });
