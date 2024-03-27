@@ -3,7 +3,8 @@ import connectDB from './db/connect.js';
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import authRoutes from './user/controller.js';
+import authRoutes from './user/auth.js';
+import userProfile from './user/controller.js';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
@@ -27,7 +28,7 @@ app.use(
     saveUninitialized: true,
     resave: false,
     cookie: {
-      maxAge: 200000,
+      maxAge: 4000000,
     },
 
     store: MongoStore.create({
@@ -38,6 +39,7 @@ app.use(
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/user', userProfile);
 
 const start = async () => {
   try {
