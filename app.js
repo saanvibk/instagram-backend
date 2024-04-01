@@ -39,6 +39,9 @@ app.use(
 );
 
 // Routes
+app.get('/', (req, res) => {
+  res.send('hello');
+});
 app.use('/auth', authRoutes);
 app.use('/user', userProfile);
 app.use('/post', post);
