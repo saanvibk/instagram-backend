@@ -3,11 +3,11 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const postSchema = new mongoose.Schema(
   {
-    body: {
+    caption: {
       type: String,
       required: true,
     },
-    photo: {
+    post: {
       type: String,
       required: true,
     },

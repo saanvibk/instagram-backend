@@ -5,6 +5,7 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import authRoutes from './user/auth.js';
 import userProfile from './user/controller.js';
+import post from './post/controller.js';
 import MongoStore from 'connect-mongo';
 import mongoose from 'mongoose';
 
@@ -40,6 +41,7 @@ app.use(
 // Routes
 app.use('/auth', authRoutes);
 app.use('/user', userProfile);
+app.use('/post', post);
 
 const start = async () => {
   try {

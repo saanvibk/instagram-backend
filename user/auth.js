@@ -53,10 +53,7 @@ router.post('/signup', async (req, res) => {
   console.log('session ID =', req.session.id);
 });
 
-router.get('/logout', async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ msg: 'User not logged in ' });
-  }
+router.get('/logout', checkSession, async (req, res) => {
   try {
     await req.sessionStore.destroy(req.session.id);
     return res.status(200).json({ msg: 'Loggin Out ' });
@@ -64,20 +61,6 @@ router.get('/logout', async (req, res) => {
     console.error('Error deleting session:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-});
-
-router.post('/post', checkSession, (req, res) => {
-  const { body, photo } = req.body;
-
-  if (!body || !photo) {
-    return res.status(400).json({ error: 'Please fill all the form' });
-  }
-
-  const post = new POST({ body, photo, postedBy: req.session.user });
-  post
-    .save()
-    .then((result) => res.json({ post: result }))
-    .catch((err) => console.log(err));
 });
 
 router.get('/allpost', async (req, res) => {
