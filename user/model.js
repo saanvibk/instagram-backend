@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
+    default:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy7-_ejhfjun3WS6ya6cX5xO38IAZcA5S8em6u-wQHQwrijW4jrI57-NDbbszUJXhZjbo&usqp=CAU',
   },
 });
 

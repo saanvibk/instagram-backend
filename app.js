@@ -33,7 +33,8 @@ app.use(
     },
 
     store: MongoStore.create({
-      mongoUrl: 'mongodb://127.0.0.1:27017/session',
+      mongoUrl:
+        'mongodb+srv://bksaanvi225:5BTH56mDoydHSaTo@cluster0.v7m4rha.mongodb.net/',
     }),
   }),
 );

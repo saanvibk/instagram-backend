@@ -21,8 +21,7 @@ router.post('/login', async (req, res) => {
 
   req.session.visited = true;
   req.session.user = findUser._id;
-  console.log('session =', req.session);
-  console.log('session ID =', req.session.id);
+
   return res.status(200).json(findUser);
 });
 
@@ -30,7 +29,6 @@ router.post('/signup', async (req, res) => {
   let { email, fullname, username, password } = req.body;
 
   const hashedPassword = (password) => {
-    console.log(password);
     const salt = bcryptjs.genSaltSync(10);
     return bcryptjs.hashSync(password, salt);
   };
@@ -50,7 +48,6 @@ router.post('/signup', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  console.log('session ID =', req.session.id);
 });
 
 router.get('/logout', checkSession, async (req, res) => {
@@ -60,15 +57,6 @@ router.get('/logout', checkSession, async (req, res) => {
   } catch (error) {
     console.error('Error deleting session:', error);
     return res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-router.get('/allpost', async (req, res) => {
-  try {
-    const posts = await POST.find();
-    return res.status(200).json(posts);
-  } catch (error) {
-    console.log(error);
   }
 });
 
