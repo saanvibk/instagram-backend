@@ -34,7 +34,7 @@ app.use(
 
     store: MongoStore.create({
       mongoUrl:
-        'mongodb+srv://bksaanvi225:5BTH56mDoydHSaTo@cluster0.v7m4rha.mongodb.net/',
+        'mongodb+srv://bksaanvi225:5BTH56mDoydHSaTo@cluster1.hm494kv.mongodb.net/instagram',
     }),
   }),
 );
@@ -50,7 +50,7 @@ app.use('/post', post);
 const start = async () => {
   try {
     await connectDB();
-    app.listen(6500, () => console.log('Server listening at 5500'));
+    app.listen(6500, () => console.log('Server listening at 6500'));
   } catch (error) {
     console.log(error);
   }

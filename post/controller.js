@@ -21,7 +21,6 @@ router.post(
   async (req, res) => {
     const postCaption = req.body.caption;
     try {
-      console.log(req.file);
       if (!req.file) {
         return res.status(400).send('No file uploaded.');
       }
@@ -52,12 +51,22 @@ router.post(
   },
 );
 
-router.get('/allpost', async (req, res) => {
+router.get('/allpost', checkSession, async (req, res) => {
   try {
-    const posts = await POST.find();
+    const posts = await POST.find().populate('postedBy');
     return res.status(200).json(posts);
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get('/userPosts', checkSession, async (req, res) => {
+  try {
+    const userPosts = await POST.find({ postedBy: req.session.user });
+    return res.status(200).json({ userPosts });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ msg: 'No post available' });
   }
 });
 
