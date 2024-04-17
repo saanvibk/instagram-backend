@@ -29,8 +29,6 @@ router.post(
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: `${req.session.user}/user_post`,
       });
-      console.log(result);
-
       try {
         const userPost = await POST.create({
           post: result.secure_url,
@@ -53,7 +51,9 @@ router.post(
 
 router.get('/allpost', checkSession, async (req, res) => {
   try {
-    const posts = await POST.find().populate('postedBy');
+    const posts = await POST.find()
+      .populate('postedBy')
+      .populate('comments.postedBy');
     return res.status(200).json(posts);
   } catch (error) {
     console.log(error);
@@ -67,6 +67,28 @@ router.get('/userPosts', checkSession, async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({ msg: 'No post available' });
+  }
+});
+
+router.put('/comment', checkSession, async (req, res) => {
+  const comment = {
+    comment: req.body.comment,
+    postedBy: req.session.user,
+  };
+  try {
+    const updateComment = await POST.findOneAndUpdate(
+      { _id: req.body.postId },
+      { $push: { comments: comment } },
+      {
+        new: true,
+      },
+    )
+      .populate('comments.postedBy')
+      .populate('postedBy');
+    return res.status(200).json({ updateComment });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ msg: 'Error while posting comment' });
   }
 });
 
