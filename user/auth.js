@@ -14,15 +14,14 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ msg: 'User not Found' });
   }
   const checkPassword = await bcryptjs.compare(password, findUser.password);
-  console.log(checkPassword);
   if (!checkPassword) {
     return res.status(400).json({ msg: 'Incorrect Password' });
   }
 
   req.session.visited = true;
   req.session.user = findUser._id;
-
-  return res.status(200).json(findUser);
+  console.log(findUser);
+  return res.status(200).json({ findUser });
 });
 
 router.post('/signup', async (req, res) => {
@@ -35,7 +34,6 @@ router.post('/signup', async (req, res) => {
   password = hashedPassword(password);
 
   const user = new User({ email, fullname, username, password });
-  console.log('user');
 
   try {
     const savedUser = await user.save();

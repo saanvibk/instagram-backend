@@ -13,8 +13,12 @@ cloudinary.config({
   api_secret: '3AW0erzwFBui8CNc7OKVS8WDTKA',
 });
 
-router.get('/home', checkSession, (req, res) => {
-  res.status(200).send('home');
+router.get('/userInfo', checkSession, async (req, res) => {
+  try {
+    res.status(200).json(req.session.user);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get('/profile', checkSession, async (req, res) => {

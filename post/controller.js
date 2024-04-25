@@ -50,11 +50,13 @@ router.post(
 );
 
 router.get('/allpost', checkSession, async (req, res) => {
+  const id = req.session.user;
   try {
     const posts = await POST.find()
       .populate('postedBy')
       .populate('comments.postedBy');
-    return res.status(200).json(posts);
+
+    return res.status(200).json({ posts, user: { id } });
   } catch (error) {
     console.log(error);
   }
@@ -89,6 +91,44 @@ router.put('/comment', checkSession, async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(400).json({ msg: 'Error while posting comment' });
+  }
+});
+
+router.put('/like', checkSession, async (req, res) => {
+  try {
+    const updateLike = await POST.findOneAndUpdate(
+      { _id: req.body.postId },
+      {
+        $push: { likes: req.session.user },
+      },
+      {
+        new: true,
+      },
+    );
+    const userID = req.session.user;
+
+    return res.status(200).json({ updateLike, userID });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ msg: 'Failed to upated Likes' });
+  }
+});
+
+router.put('/unlike', checkSession, async (req, res) => {
+  try {
+    const updateLike = await POST.findOneAndUpdate(
+      { _id: req.body.postId },
+      {
+        $pull: { likes: req.session.user },
+      },
+      {
+        new: true,
+      },
+    );
+    return res.status(200).json({ updateLike });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ msg: 'Failed to upated Likes' });
   }
 });
 
